@@ -1,6 +1,7 @@
 import {NextResponse} from "next/server";
 import Course from "@/models/Course";
 import {authenticateUser} from "@/utils/auth";
+import {ICourse} from "@/types";
 
 export async function GET(req: Request) {
   console.log("GET /api/courses");
@@ -16,14 +17,14 @@ export async function GET(req: Request) {
     const allowedCourseCodes = user.courses.map((course) => course.code);
 
     if (id) {
-      const course = await Course.findOne({_id: id, code: {$in: allowedCourseCodes}}).lean();
+      const course: ICourse | null = await Course.findOne({_id: id, code: {$in: allowedCourseCodes}});
       if (!course) {
         return NextResponse.json({error: "Course not found or access denied"}, {status: 404});
       }
       return NextResponse.json(course, {status: 200});
     }
 
-    const courses = await Course.find({code: {$in: allowedCourseCodes}}).lean();
+    const courses: ICourse[] = await Course.find({code: {$in: allowedCourseCodes}}); //.lean();
     return NextResponse.json(courses, {status: 200});
   } catch (error) {
     console.error("Error in GET /api/courses:", error);

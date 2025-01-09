@@ -2,8 +2,6 @@
 import React, {useState} from "react";
 import {useAuth} from "@/context/AuthContext";
 
-const DEBUG = process.env.NODE_ENV === "development";
-
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +10,6 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      if (DEBUG) console.log("Logging in with email:", email);
       const response = await fetch("/api/auth", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
@@ -31,7 +28,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex items-center justify-center bg-gray-50">
+    <div className="flex flex-grow items-center justify-center bg-gray-50">
       <form onSubmit={handleSubmit} className="w-full max-w-md bg-white shadow-md rounded p-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Login</h2>
         <div className="mb-4">

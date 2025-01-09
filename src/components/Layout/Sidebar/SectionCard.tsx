@@ -32,19 +32,14 @@ const SectionCard = ({
         } flex items-center justify-start whitespace-normal text-ellipsis text-gray-800`}
       >
         {sidebarOpen ? (
-          <span className="overflow-hidden line-clamp-2">{section.title}</span>
+          <span className={`overflow-hidden ${!isSelected && "line-clamp-2"}`}>{section.title}</span>
         ) : (
           <span>{section.title.charAt(0)}</span>
         )}
       </button>
 
       {/* Expanded Options */}
-      <div
-        className={`overflow-hidden transition-all duration-300`}
-        style={{
-          maxHeight: isExpanded ? "500px" : "0px", // Set a reasonable max height for expanded state
-        }}
-      >
+      <div className={`overflow-hidden transition-all duration-300`}>
         {isExpanded && (
           <div className="bg-gray-200 rounded p-2 space-y-2">
             <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300 text-gray-800">

@@ -20,16 +20,16 @@ export interface IQuestion {
 
 export interface ISection {
   _id: string;
+  number: number;
   sectionId: string;
   title: string;
   description?: string;
 }
-
 export interface ICourse {
-  courseId: string;
+  _id: string;
+  code: string;
   title: string;
   description: string;
-  sections: ISection[];
 }
 
 export interface JwtPayload {

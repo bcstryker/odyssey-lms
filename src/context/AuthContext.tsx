@@ -52,7 +52,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
   const login = (newToken: string) => {
     localStorage.setItem("token", newToken);
     validateToken(newToken);
-    router.push("/");
+    router.push("/dashboard");
   };
 
   const logout = () => {

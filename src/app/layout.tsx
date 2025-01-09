@@ -8,10 +8,10 @@ import "./globals.css";
 export default function RootLayout({children}: {children: ReactNode}) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col">
+      <body className="h-screen flex flex-col">
         <AuthProvider>
           <Header />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow flex overflow-hidden">{children}</main>
           <Footer />
         </AuthProvider>
       </body>
