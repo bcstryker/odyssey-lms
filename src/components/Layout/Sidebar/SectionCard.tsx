@@ -18,20 +18,21 @@ const SectionCard: React.FC<SectionCardProps> = ({
   isExpanded,
   onToggleExpand,
 }) => {
-  const isSelected = selectedSection === section._id;
-  const [isExpandedState, setIsExpandedState] = useState(isExpanded);
+  const isSelected = selectedSection === section.sectionId;
+  const [selectedSubmenu, setSelectedSubmenu] = useState<string>("Lesson"); // Default to "Lesson"
 
-  const toggleExpand = () => {
-    setIsExpandedState(!isExpandedState);
-    onToggleExpand(section._id);
+  const handleSubmenuClick = (submenu: string) => {
+    setSelectedSubmenu(submenu);
+    console.log(`Selected submenu: ${submenu}`);
+    // Additional logic to load content for the submenu
   };
 
   return (
-    <div className={`w-full rounded bg-gray-100 ${isExpandedState ? "shadow-md" : ""} transition-all duration-200`}>
+    <div className={`w-full rounded bg-gray-100 ${isExpanded ? "shadow-md" : ""} transition-all duration-200`}>
       <button
         onClick={() => {
           setSelectedSection(section.sectionId);
-          toggleExpand();
+          onToggleExpand(section._id);
         }}
         className={`w-full text-left px-4 py-2 rounded hover:bg-gray-200 ${
           isSelected ? "bg-gray-200 font-semibold" : "bg-gray-100"
@@ -40,13 +41,29 @@ const SectionCard: React.FC<SectionCardProps> = ({
         <SectionTitle title={section.title} isSelected={isSelected} />
       </button>
 
-      <div className={`overflow-hidden transition-all duration-300 ${isExpandedState ? "max-h-screen" : "max-h-0"}`}>
-        {isExpandedState && (
+      <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? "max-h-screen" : "max-h-0"}`}>
+        {isExpanded && (
           <div className="bg-gray-200 rounded p-2 space-y-2">
-            <SectionButton text="Lesson Summary" />
-            <SectionButton text="Quiz" />
-            <SectionButton text="Flashcards" />
-            <SectionButton text="Experiment" />
+            <SectionButton
+              text="Lesson"
+              isSelected={selectedSubmenu === "Lesson"}
+              onClick={() => handleSubmenuClick("Lesson")}
+            />
+            <SectionButton
+              text="Quiz"
+              isSelected={selectedSubmenu === "Quiz"}
+              onClick={() => handleSubmenuClick("Quiz")}
+            />
+            <SectionButton
+              text="Flashcards"
+              isSelected={selectedSubmenu === "Flashcards"}
+              onClick={() => handleSubmenuClick("Flashcards")}
+            />
+            <SectionButton
+              text="Experiment"
+              isSelected={selectedSubmenu === "Experiment"}
+              onClick={() => handleSubmenuClick("Experiment")}
+            />
           </div>
         )}
       </div>
