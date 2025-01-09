@@ -7,19 +7,21 @@ interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
   sections: ISection[];
+  selectedSection: string | null;
+  setSelectedSection: (sectionId: string) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({sections, sidebarOpen, setSidebarOpen}) => {
-  // const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+const Sidebar: React.FC<SidebarProps> = ({
+  sections,
+  sidebarOpen,
+  setSidebarOpen,
+  selectedSection,
+  setSelectedSection,
+}) => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   const handleToggleExpand = (sectionId: string) => {
     setExpandedSection((prev) => (prev === sectionId ? null : sectionId));
-  };
-
-  const toggleSidebar = () => {
-    setSidebarOpen(false);
   };
 
   return (
@@ -32,7 +34,7 @@ const Sidebar: React.FC<SidebarProps> = ({sections, sidebarOpen, setSidebarOpen}
         <p className="font-semibold text-xl text-gray-700 my-4 whitespace-nowrap overflow-hidden text-ellipsis">
           {sidebarOpen && "Sections"}
         </p>
-        <CollapseExpandButton sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+        <CollapseExpandButton sidebarOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       </div>
 
       <ul className="space-y-2">
@@ -45,7 +47,6 @@ const Sidebar: React.FC<SidebarProps> = ({sections, sidebarOpen, setSidebarOpen}
                   section={section}
                   selectedSection={selectedSection}
                   setSelectedSection={setSelectedSection}
-                  sidebarOpen={sidebarOpen}
                   isExpanded={expandedSection === section._id}
                   onToggleExpand={() => handleToggleExpand(section._id)}
                 />

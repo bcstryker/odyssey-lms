@@ -2,10 +2,12 @@ import {NextResponse} from "next/server";
 import Course from "@/models/Course";
 import {authenticateUser} from "@/utils/auth";
 import {ICourse} from "@/types";
+import {connectDB} from "@/utils/db";
 
 export async function GET(req: Request) {
   console.log("GET /api/courses");
   try {
+    await connectDB();
     const user = await authenticateUser(req);
     if (!user) {
       return NextResponse.json({error: "Unauthorized"}, {status: 401});

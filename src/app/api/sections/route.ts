@@ -1,11 +1,13 @@
 import {NextResponse} from "next/server";
 import Section from "@/models/Section";
 import {authenticateUser} from "@/utils/auth";
+import {connectDB} from "@/utils/db";
 
 export async function GET(req: Request) {
   console.log("GET /api/sections");
 
   try {
+    await connectDB();
     const user = await authenticateUser(req);
     if (!user) {
       return NextResponse.json({error: "Unauthorized"}, {status: 401});

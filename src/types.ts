@@ -1,5 +1,27 @@
 import {Types} from "mongoose";
 
+export interface JwtPayload {
+  role: string;
+  email: string;
+  courses: ICourse[];
+  exp?: number;
+}
+
+export interface ICourse {
+  _id: string;
+  code: string;
+  title: string;
+  description: string;
+}
+
+export interface ISection {
+  _id: string;
+  number: number;
+  sectionId: string;
+  title: string;
+  description?: string;
+}
+
 export interface IUser {
   name: string;
   email: string;
@@ -17,24 +39,21 @@ export interface IQuestion {
   correctAnswer: string;
   explanation?: string;
 }
-
-export interface ISection {
+export interface ITopic {
   _id: string;
-  number: number;
+  topicId: string;
   sectionId: string;
   title: string;
+  contentBlocks: IContentBlock[];
+  resources: IResource[];
+}
+export interface IContentBlock {
+  type: "text" | "image" | "code";
+  content: string;
   description?: string;
 }
-export interface ICourse {
-  _id: string;
-  code: string;
-  title: string;
-  description: string;
-}
 
-export interface JwtPayload {
-  role: string;
-  email: string;
-  courses: ICourse[];
-  exp?: number;
+export interface IResource {
+  url: string;
+  description?: string;
 }

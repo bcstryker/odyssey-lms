@@ -1,18 +1,28 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-let cached = global.mongoose;
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
+let isConnected = false; // Track the connection status
 
-export async function connectDB() {
-  if (cached.conn) {
-    return cached.conn;
+export const connectDB = async () => {
+  if (isConnected) {
+    console.log("Already connected to the database.");
+    return;
   }
-  if (!cached.promise) {
-    const opts = { /* your mongoose connection options */ };
-    cached.promise = mongoose.connect(process.env.MONGODB_URI, opts).then(mongoose => mongoose);
+
+  if (mongoose.connections.length > 0) {
+    isConnected = mongoose.connections[0].readyState === 1;
+    if (isConnected) {
+      console.log("Using existing database connection.");
+      return;
+    }
+    await mongoose.disconnect();
   }
-  cached.conn = await cached.promise;
-  return cached.conn;
-}
+
+  const dbURI = process.env.MONGODB_URI;
+  await mongoose.connect(dbURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+
+  isConnected = true;
+  console.log("New database connection established.");
+};

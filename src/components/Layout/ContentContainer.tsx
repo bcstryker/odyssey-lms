@@ -5,12 +5,7 @@ interface ContentContainerProps {
 }
 
 const ContentContainer: React.FC<ContentContainerProps> = ({children}) => {
-  return (
-    <div className="flex-grow p-4 bg-slate-400">
-      {children}
-      <h2 className="text-xl font-bold mb-4">Main</h2>
-    </div>
-  );
+  return <div className="flex-grow p-4 bg-slate-400 overflow-y-auto">{children}</div>;
 };
 
 export default ContentContainer;

@@ -7,23 +7,18 @@ import User from "@/models/User";
 export async function POST(req: NextRequest) {
   try {
     const {email, password} = await req.json();
-
-    // Connect to database
     await connectDB();
 
-    // Find the user by email
     const user = await User.findOne({email});
     if (!user) {
       return NextResponse.json({error: "Invalid credentials"}, {status: 401});
     }
 
-    // Validate password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return NextResponse.json({error: "Invalid credentials"}, {status: 401});
     }
 
-    // Generate JWT
     const token = jwt.sign(
       {
         id: user._id,
@@ -35,7 +30,6 @@ export async function POST(req: NextRequest) {
       {expiresIn: "1h"}
     );
 
-    // Return the token
     return NextResponse.json({token}, {status: 200});
   } catch (error) {
     console.error("Error during authentication:", error);
@@ -53,7 +47,6 @@ export async function GET(req: NextRequest) {
   const token = authHeader.split(" ")[1];
 
   try {
-    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET!);
     return NextResponse.json({user: decoded}, {status: 200});
   } catch (error) {

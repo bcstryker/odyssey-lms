@@ -1,53 +1,52 @@
+import React, {useState} from "react";
+import SectionTitle from "./SectionTitle";
+import SectionButton from "./SectionButton";
 import {ISection} from "@/types";
 
 interface SectionCardProps {
   section: ISection;
   selectedSection: string | null;
   setSelectedSection: (sectionId: string) => void;
-  sidebarOpen: boolean;
   isExpanded: boolean;
   onToggleExpand: (sectionId: string) => void;
 }
 
-const SectionCard = ({
+const SectionCard: React.FC<SectionCardProps> = ({
   section,
   selectedSection,
   setSelectedSection,
-  sidebarOpen,
   isExpanded,
   onToggleExpand,
-}: SectionCardProps) => {
+}) => {
   const isSelected = selectedSection === section._id;
+  const [isExpandedState, setIsExpandedState] = useState(isExpanded);
+
+  const toggleExpand = () => {
+    setIsExpandedState(!isExpandedState);
+    onToggleExpand(section._id);
+  };
 
   return (
-    <div className={`w-full rounded bg-gray-100 ${isExpanded ? "shadow-md" : ""} transition-all duration-200`}>
-      {/* Main Card */}
+    <div className={`w-full rounded bg-gray-100 ${isExpandedState ? "shadow-md" : ""} transition-all duration-200`}>
       <button
         onClick={() => {
-          setSelectedSection(section._id); // Use _id for consistency
-          onToggleExpand(section._id);
+          setSelectedSection(section.sectionId);
+          toggleExpand();
         }}
         className={`w-full text-left px-4 py-2 rounded hover:bg-gray-200 ${
           isSelected ? "bg-gray-200 font-semibold" : "bg-gray-100"
         } flex items-center justify-start whitespace-normal text-ellipsis text-gray-800`}
       >
-        {sidebarOpen ? (
-          <span className={`overflow-hidden ${!isSelected && "line-clamp-2"}`}>{section.title}</span>
-        ) : (
-          <span>{section.title.charAt(0)}</span>
-        )}
+        <SectionTitle title={section.title} isSelected={isSelected} />
       </button>
 
-      {/* Expanded Options */}
-      <div className={`overflow-hidden transition-all duration-300`}>
-        {isExpanded && (
+      <div className={`overflow-hidden transition-all duration-300 ${isExpandedState ? "max-h-screen" : "max-h-0"}`}>
+        {isExpandedState && (
           <div className="bg-gray-200 rounded p-2 space-y-2">
-            <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300 text-gray-800">
-              Lesson Summary
-            </button>
-            <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300 text-gray-800">Quiz</button>
-            <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300 text-gray-800">Flashcards</button>
-            <button className="w-full text-left px-2 py-1 rounded hover:bg-gray-300 text-gray-800">Experiment</button>
+            <SectionButton text="Lesson Summary" />
+            <SectionButton text="Quiz" />
+            <SectionButton text="Flashcards" />
+            <SectionButton text="Experiment" />
           </div>
         )}
       </div>

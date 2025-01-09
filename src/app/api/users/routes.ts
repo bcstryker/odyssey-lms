@@ -1,12 +1,16 @@
+//TODO this is all jacked up, need to fix this
+
 import {NextResponse} from "next/server";
 import User from "@/models/User";
 import {authenticateUser, isAdmin} from "@/utils/auth";
 import bcrypt from "bcrypt";
 import {v4 as uuidv4} from "uuid";
 import nodemailer from "nodemailer"; // Example email service
+import {connectDB} from "@/utils/db";
 
 // POST: Create users (Admin only)
 export async function POST(req: Request) {
+  await connectDB();
   const admin = await authenticateUser(req);
   if (!admin || !isAdmin(admin)) {
     return NextResponse.json({error: "Unauthorized"}, {status: 401});

@@ -54,7 +54,9 @@ export async function authenticateUser(req: Request) {
   }
 
   const {email} = decoded;
-  const user = await User.findOne({email}).lean<IUser>();
+  console.log("Decoded token:", decoded);
+  console.log("Email:", email);
+  const user = await User.findOne({email: "user@example.com"}).lean<IUser>();
   if (!user) {
     throw new Error("User not found");
   }
