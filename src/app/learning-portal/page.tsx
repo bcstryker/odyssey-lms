@@ -4,10 +4,11 @@ import ContentContainer from "@/components/Layout/ContentContainer";
 import Sidebar from "@/components/Layout/Sidebar";
 import SectionContent from "./Components/SectionContent";
 import {useAuth} from "@/context/AuthContext";
-import {IQuestion, ISection, ITopic} from "@/types";
+import {IFlashCard, IQuestion, ISection, ITopic} from "@/types";
 import {useEffect, useState} from "react";
 import {useSearchParams} from "next/navigation";
 import Quiz from "./Components/Quiz";
+import FlashCards from "./Components/FlashCards";
 
 export default function LearningPortal() {
   const {token} = useAuth();
@@ -18,8 +19,9 @@ export default function LearningPortal() {
   const [sections, setSections] = useState<ISection[]>([]);
   const [topics, setTopics] = useState<ITopic[]>([]);
   const [questions, setQuestions] = useState<IQuestion[]>([]);
+  const [flashcards, setFlashcards] = useState<IFlashCard[]>([]);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
-  const [selectedSubmenu, setSelectedSubmenu] = useState<string>("Lesson Summary");
+  const [selectedSubmenu, setSelectedSubmenu] = useState<string>("Lesson");
 
   // Fetch sections when courseCode changes
   useEffect(() => {
@@ -99,6 +101,32 @@ export default function LearningPortal() {
     fetchQuestions();
   }, [selectedSection, selectedSubmenu]);
 
+  // Fetch flashcards when Flashcards is selected
+  useEffect(() => {
+    const fetchFlashcards = async () => {
+      if (selectedSubmenu !== "Flashcards") return;
+
+      try {
+        const response = await fetch(`/api/flashcards?sectionId=${selectedSection}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch flashcards");
+        }
+
+        const data = await response.json();
+        setFlashcards(data);
+      } catch (err) {
+        console.error("Error fetching flashcards:", err);
+      }
+    };
+
+    fetchFlashcards();
+  }, [selectedSection, selectedSubmenu]);
+
   if (!token) {
     return (
       <div className="flex items-center justify-center bg-gray-50">
@@ -111,12 +139,13 @@ export default function LearningPortal() {
   }
 
   const renderContent = () => {
-    if (selectedSubmenu === "Lesson Summary") {
+    if (selectedSubmenu === "Lesson") {
       return <SectionContent topics={topics} />;
     } else if (selectedSubmenu === "Quiz") {
       return <Quiz questions={questions} />;
+    } else if (selectedSubmenu === "Flashcards") {
+      return <FlashCards flashcards={flashcards} />;
     }
-
     return <div className="p-4 bg-white rounded shadow">Feature coming soon for: {selectedSubmenu}</div>;
   };
 

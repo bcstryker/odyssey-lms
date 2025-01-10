@@ -62,3 +62,10 @@ export interface IResource {
   url: string;
   description?: string;
 }
+
+export interface IFlashCard {
+  _id?: string;
+  sectionId: string;
+  front: string;
+  back: string;
+}

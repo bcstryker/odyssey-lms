@@ -41,9 +41,9 @@ const SectionCard: React.FC<SectionCardProps> = ({
         {isExpanded && (
           <div className="bg-gray-200 rounded p-2 space-y-2">
             <SectionButton
-              text="Lesson Summary"
-              isSelected={selectedSubmenu === "Lesson Summary"}
-              onClick={() => setSelectedSubmenu("Lesson Summary")}
+              text="Lesson"
+              isSelected={selectedSubmenu === "Lesson"}
+              onClick={() => setSelectedSubmenu("Lesson")}
             />
             <SectionButton
               text="Quiz"
