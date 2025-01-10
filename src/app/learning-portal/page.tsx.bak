@@ -4,7 +4,7 @@ import ContentContainer from "@/components/Layout/ContentContainer";
 import Sidebar from "@/components/Layout/Sidebar";
 import SectionContent from "./Components/SectionContent";
 import {useAuth} from "@/context/AuthContext";
-import {IQuestion, ISection, ITopic} from "@/types";
+import {ISection, ITopic} from "@/types";
 import {useEffect, useState} from "react";
 import {useSearchParams} from "next/navigation";
 import Quiz from "./Components/Quiz";
@@ -17,7 +17,6 @@ export default function LearningPortal() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sections, setSections] = useState<ISection[]>([]);
   const [topics, setTopics] = useState<ITopic[]>([]);
-  const [questions, setQuestions] = useState<IQuestion[]>([]);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [selectedSubmenu, setSelectedSubmenu] = useState<string>("Lesson Summary");
 
@@ -73,32 +72,6 @@ export default function LearningPortal() {
     fetchTopics();
   }, [selectedSection]);
 
-  // Fetch quiz questions when Quiz is selected
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      if (selectedSubmenu !== "Quiz") return;
-
-      try {
-        const response = await fetch(`/api/questions?sectionId=${selectedSection}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch questions");
-        }
-
-        const data = await response.json();
-        setQuestions(data);
-      } catch (err) {
-        console.error("Error fetching questions:", err);
-      }
-    };
-
-    fetchQuestions();
-  }, [selectedSection, selectedSubmenu]);
-
   if (!token) {
     return (
       <div className="flex items-center justify-center bg-gray-50">
@@ -113,8 +86,6 @@ export default function LearningPortal() {
   const renderContent = () => {
     if (selectedSubmenu === "Lesson Summary") {
       return <SectionContent topics={topics} />;
-    } else if (selectedSubmenu === "Quiz") {
-      return <Quiz questions={questions} />;
     }
 
     return <div className="p-4 bg-white rounded shadow">Feature coming soon for: {selectedSubmenu}</div>;

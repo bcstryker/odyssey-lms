@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import SectionCard from "./SectionCard";
+import {useState} from "react";
 import CollapseExpandButton from "./CollapseExpandButton";
+import SectionCard from "./SectionCard";
 import {ISection} from "@/types";
 
 interface SidebarProps {
@@ -9,6 +9,8 @@ interface SidebarProps {
   sections: ISection[];
   selectedSection: string | null;
   setSelectedSection: (sectionId: string) => void;
+  selectedSubmenu: string;
+  setSelectedSubmenu: (submenu: string) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -17,6 +19,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   setSidebarOpen,
   selectedSection,
   setSelectedSection,
+  selectedSubmenu,
+  setSelectedSubmenu,
 }) => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
@@ -47,6 +51,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                   section={section}
                   selectedSection={selectedSection}
                   setSelectedSection={setSelectedSection}
+                  selectedSubmenu={selectedSubmenu}
+                  setSelectedSubmenu={setSelectedSubmenu}
                   isExpanded={expandedSection === section._id}
                   onToggleExpand={() => handleToggleExpand(section._id)}
                 />

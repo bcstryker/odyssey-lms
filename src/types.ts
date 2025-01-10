@@ -34,9 +34,14 @@ export interface IUser {
 }
 export interface IQuestion {
   _id: string;
-  questionText: string;
+  sectionId: string;
+  reference?: {
+    type: "code" | "image";
+    content: string;
+  };
+  question: string;
   options: string[];
-  correctAnswer: string;
+  answer: string[];
   explanation?: string;
 }
 export interface ITopic {
