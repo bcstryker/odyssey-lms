@@ -18,24 +18,29 @@ const SectionContent: React.FC<SectionContentProps> = ({topics}) => {
           <h2 className="text-2xl font-bold text-gray-500 mb-4">{topic.title}</h2>
           {topic.contentBlocks.map((block, index) => (
             <div key={index} className="mb-4">
-              {block.type === "text" && <p className="text-gray-700">{block.content}</p>}
+              {block.type === "text" && <p className="text-gray-700">{block.value}</p>}
               {block.type === "image" && (
-                <Image
-                  src={block.content}
-                  alt={block.description || "Image"}
-                  className="w-full rounded"
-                  layout="responsive"
-                  width={700}
-                  height={475}
-                  onError={(e) => {
-                    console.error(`Failed to load image: ${block.content}`);
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
-                />
+                <div className="w-full flex justify-center">
+                  <div className="relative w-4/5 pb-[35%]">
+                    {" "}
+                    {/* 67.86% is the aspect ratio (475/700 * 100) */}
+                    <Image
+                      src={block.value}
+                      alt={block.description || "Image"}
+                      className="w-full rounded"
+                      layout="fill"
+                      objectFit="contain"
+                      onError={(e) => {
+                        console.error(`Failed to load image: ${block.value}`);
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                  </div>
+                </div>
               )}
               {block.type === "code" && (
                 <pre className="bg-gray-200 p-4 rounded">
-                  <code className="text-black">{block.content}</code>
+                  <code className="text-black">{block.value}</code>
                 </pre>
               )}
             </div>

@@ -54,7 +54,7 @@ export interface ITopic {
 }
 export interface IContentBlock {
   type: "text" | "image" | "code";
-  content: string;
+  value: string;
   description?: string;
 }
 

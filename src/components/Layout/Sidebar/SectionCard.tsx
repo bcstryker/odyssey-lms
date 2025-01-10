@@ -46,14 +46,14 @@ const SectionCard: React.FC<SectionCardProps> = ({
               onClick={() => setSelectedSubmenu("Lesson")}
             />
             <SectionButton
-              text="Quiz"
-              isSelected={selectedSubmenu === "Quiz"}
-              onClick={() => setSelectedSubmenu("Quiz")}
-            />
-            <SectionButton
               text="Flashcards"
               isSelected={selectedSubmenu === "Flashcards"}
               onClick={() => setSelectedSubmenu("Flashcards")}
+            />
+            <SectionButton
+              text="Quiz"
+              isSelected={selectedSubmenu === "Quiz"}
+              onClick={() => setSelectedSubmenu("Quiz")}
             />
           </div>
         )}
